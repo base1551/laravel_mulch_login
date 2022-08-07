@@ -27,7 +27,7 @@
                                             名前
                                         </th>
                                         <th class="md:px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">
-                                            メールアドレス
+                                            組織区分
                                         </th>
                                         <th class="md:px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">
                                             作成日
@@ -40,7 +40,7 @@
                                         @foreach ($teams as $team)
                                             <tr>
                                                 <td class="md:px-4 py-3">{{ $team->name }}</td>
-                                                <td class="md:px-4 py-3">{{ $team->email }}</td>
+                                                <td class="md:px-4 py-3">（仮）高校</td>
                                                 <td class="md:px-4 py-3">{{ $team->created_at->diffForHumans() }}</td>
                                                 <td class="md:px-4 py-3">
                                                     <button
@@ -65,7 +65,7 @@
                                     @endif
                                     </tbody>
                                 </table>
-                                {{--                                {{ $teams->links() }}--}}
+                                {{ $teams->links() }}
                             </div>
                         </div>
                     </section>

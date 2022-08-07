@@ -22,9 +22,9 @@ class TeamController extends Controller
      *
      * @return Application|Factory|View
      */
-    public function index()
+    public function index(): View|Factory|Application
     {
-        $teams = null;
+        $teams = Team::paginate(10);
         return view(
             'admin.teams.index', compact('teams')
         );
@@ -35,7 +35,7 @@ class TeamController extends Controller
      *
      * @return Application|Factory|View|\Illuminate\Http\Response
      */
-    public function create()
+    public function create(): View|Factory|\Illuminate\Http\Response|Application
     {
         return view('admin.teams.create');
     }
@@ -87,11 +87,12 @@ class TeamController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|View|\Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id): View|Factory|\Illuminate\Http\Response|Application
     {
-        //
+        $team = Team::findOrFail($id);
+        return view('admin.teams.edit', compact('team'));
     }
 
     /**
@@ -99,21 +100,37 @@ class TeamController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): \Illuminate\Http\RedirectResponse
     {
-        //
+        $team = Team::findOrFail($id);
+        $team->name = $request->name;
+        $team->save();
+
+        return redirect()
+            ->route('admin.teams.index')
+            ->with([
+                'message' => 'チーム情報を更新しました。',
+                'status' => 'info'
+            ]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy($id)
+    public function destroy($id): \Illuminate\Http\RedirectResponse
     {
-        //
+        Team::findOrFail($id)->delete(); //ソフトデリート
+
+        return redirect()
+            ->route('admin.team.index')
+            ->with([
+                'message' => 'チーム情報を削除しました。',
+                'status' => 'alert'
+            ]);
     }
 }
