@@ -27,8 +27,8 @@
                     <x-nav-link :href="route('admin.games.index')" :active="request()->routeIs('admin.games.index')">
                         試合管理
                     </x-nav-link>
-                    <x-nav-link :href="route('admin.games.index')" :active="request()->routeIs('admin.games.index')">
-                        試合管理
+                    <x-nav-link :href="route('admin.teams.index')" :active="request()->routeIs('admin.teams.index')">
+                        チーム管理
                     </x-nav-link>
                     <x-nav-link>
                         選手管理

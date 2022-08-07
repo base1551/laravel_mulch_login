@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Models\Game;
-use App\Models\Team;
+use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -12,6 +11,11 @@ use Illuminate\Support\Facades\DB;
 
 class GameController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:admin');
+    }
+
     public function index()
     {
         $games = null;

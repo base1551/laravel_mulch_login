@@ -9,8 +9,11 @@ class Team extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['name'];
+
     public function games(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
+
         return $this->belongsToMany(Game::class);
     }
 }

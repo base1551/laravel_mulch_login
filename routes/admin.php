@@ -1,7 +1,8 @@
 <?php
 
+use App\Http\Controllers\Admin\TeamController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\GameController;
+use App\Http\Controllers\Admin\GameController;
 use App\Http\Controllers\Admin\OwnersController;
 use App\Http\Controllers\Admin\Auth\NewPasswordController;
 use App\Http\Controllers\Admin\Auth\VerifyEmailController;
@@ -30,12 +31,16 @@ use App\Http\Controllers\Admin\Auth\EmailVerificationNotificationController;
 Route::resource('owners', OwnersController::class)
     ->middleware('auth:admin')->except(['show']);
 
+//期限切れowner
 Route::prefix('expired-owners')->middleware('auth:admin')->group(function () {
     Route::get('index', [OwnersController::class, 'expiredOwnerIndex'])->name('expired-owners.index');
     Route::post('destroy/{owner}', [OwnersController::class, 'expiredOwnerDestroy'])->name('expired-owners.destroy');
 });
 
 Route::resource('games', GameController::class)
+    ->middleware('auth:admin')->except(['show']);
+
+Route::resource('teams', TeamController::class)
     ->middleware('auth:admin')->except(['show']);
 
 Route::get('/dashboard', function () {

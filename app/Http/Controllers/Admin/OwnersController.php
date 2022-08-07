@@ -4,9 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Owner; // Eloquent エロクアント
+use App\Models\Owner;
+
+// Eloquent エロクアント
 use App\Models\Shop;
-use Illuminate\Support\Facades\DB; // QueryBuilder クエリビルダ
+use Illuminate\Support\Facades\DB;
+
+// QueryBuilder クエリビルダ
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Throwable;
@@ -59,12 +63,11 @@ class OwnersController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        //$request->name;
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:owners',
@@ -103,7 +106,7 @@ class OwnersController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -114,7 +117,7 @@ class OwnersController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -127,8 +130,8 @@ class OwnersController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -150,7 +153,7 @@ class OwnersController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
