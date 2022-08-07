@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
             // ProductSeeder::class,
             // StockSeeder::class,
             UserSeeder::class,
-//            TeamSeeder::class,
+            TeamSeeder::class,
 //            GameSeeder::class,
         ]);
         Product::factory(100)->create();

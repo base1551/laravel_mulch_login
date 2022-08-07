@@ -14,7 +14,7 @@ class TeamFactory extends Factory
     public function definition()
     {
         return [
-            'name' =>  $this->faker->lastName() . '高校',
+            'name' => $this->faker->lastName() . '高校',
         ];
     }
 }
