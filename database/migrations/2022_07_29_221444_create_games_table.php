@@ -14,15 +14,7 @@ return new class extends Migration {
     {
         Schema::create('games', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('first_team_id')->constrained('teams');
-            $table->foreignId('second_team_id')->constrained('teams');
-
-            $table->integer('first_team_score')->nullable();
-            $table->integer('second_team_score')->nullable();
-            $table->integer('first_team_hits')->nullable();
-            $table->integer('second_team_hits')->nullable();
-            $table->integer('first_team_errors')->nullable();
-            $table->integer('second_team_errors')->nullable();
+            $table->date('game_date')->comment('試合日');
             $table->timestamps();
         });
     }
