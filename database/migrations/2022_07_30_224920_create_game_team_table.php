@@ -16,10 +16,13 @@ class CreateGameTeamTable extends Migration
         Schema::create('game_team', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('game_id')->comment('試合ID');
-            $table->foreign('game_id')->references('id')->on('categories')->onDelete('cascade');
+            $table->foreign('game_id')->references('id')->on('games')->onDelete('cascade');
             $table->unsignedBigInteger('team_id')->comment('チームID');
             $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
             $table->boolean('first_attack_flg');
+            $table->integer('score')->nullable();
+            $table->integer('hits')->nullable();
+            $table->integer('errors')->nullable();
             $table->timestamps();
         });
     }
