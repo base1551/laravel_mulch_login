@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -21,7 +20,7 @@ return new class extends Migration
             $table->integer('first_team_score')->nullable();
             $table->integer('second_team_score')->nullable();
             $table->integer('first_team_hits')->nullable();
-            $table->integer('socond_team_hits')->nullable();
+            $table->integer('second_team_hits')->nullable();
             $table->integer('first_team_errors')->nullable();
             $table->integer('second_team_errors')->nullable();
             $table->timestamps();
