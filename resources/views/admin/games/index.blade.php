@@ -62,7 +62,9 @@
                                     @endif
                                     </tbody>
                                 </table>
-                                {{--                                {{ $games->links() }}--}}
+                                @if($games)
+                                    {{ $games->links() }}
+                                @endif  　
                             </div>
                         </div>
                     </section>

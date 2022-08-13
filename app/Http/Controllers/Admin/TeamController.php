@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Consts\CommonConst;
 use App\Http\Controllers\Controller;
 use App\Models\Owner;
 use App\Models\Shop;
@@ -24,7 +25,7 @@ class TeamController extends Controller
      */
     public function index(): View|Factory|Application
     {
-        $teams = Team::paginate(10);
+        $teams = Team::paginate(CommonConst::PAGINATE_COUNT);
         return view(
             'admin.teams.index', compact('teams')
         );

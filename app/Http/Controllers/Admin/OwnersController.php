@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Consts\CommonConst;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Owner;
@@ -25,7 +26,7 @@ class OwnersController extends Controller
 
     public function index()
     {
-        $owners = Owner::paginate(10);
+        $owners = Owner::paginate(CommonConst::PAGINATE_COUNT);
 
         return view(
             'admin.owners.index',

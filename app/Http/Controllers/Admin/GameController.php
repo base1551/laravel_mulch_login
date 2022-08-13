@@ -2,12 +2,22 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Consts\CommonConst;
+use App\Consts\GameTeamConst;
 use App\Http\Controllers\Controller;
+use App\Models\Game;
+use App\Models\Team;
+use Carbon\Carbon;
+use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Throwable;
+use function PHPUnit\Framework\isNull;
+use function PHPUnit\Framework\throwException;
 
 class GameController extends Controller
 {
@@ -18,7 +28,8 @@ class GameController extends Controller
 
     public function index()
     {
-        $games = null;
+        $games = Game::paginate(CommonConst::PAGINATE_COUNT);
+
         return view(
             'admin.games.index', compact('games')
         );
@@ -38,10 +49,12 @@ class GameController extends Controller
      * Store a newly created resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws Throwable
      */
     public function store(Request $request)
     {
+        //todo:フォームバリデーション
         $request->validate([
             'game_date' => 'required|date',
             'first_team_name' => 'required|string',
@@ -51,30 +64,42 @@ class GameController extends Controller
         ]);
 
         try {
+            //todo:idからの取得
+            //game更新
+            //game_team登録
             DB::transaction(function () use ($request) {
-                $owner = Owner::create([
-                    'name' => $request->name,
-                    'email' => $request->email,
-                    'password' => Hash::make($request->password),
-                ]);
+                $first_team = Team::where('name', $request->first_team_name)->firstOrFail();
+                $second_team = Team::where('name', $request->second_team_name)->firstOrFail();
 
-                Shop::create([
-                    'owner_id' => $owner->id,
-                    'name' => '店名を入力してください',
-                    'information' => '',
-                    'filename' => '',
-                    'is_selling' => true
+                $game = Game::create([
+                    'game_date' => Carbon::parse($request->game_date),
                 ]);
-            }, 2);
+                //todo:ヒット、エラー数登録処理
+                //todo:共通化
+                $game->teams()->attach(
+                    $first_team->id,
+                    [
+                        'first_attack_flg' => GameTeamConst::FIRST_ATTACK,
+                        'score' => $request->first_team_score,
+                    ]
+                );
+                $game->teams()->attach(
+                    $second_team->id,
+                    [
+                        'first_attack_flg' => GameTeamConst::SECOND_ATTACK,
+                        'score' => $request->second_team_score,
+                    ]
+                );
+            });
         } catch (Throwable $e) {
             Log::error($e);
             throw $e;
         }
 
         return redirect()
-            ->route('admin.owners.index')
+            ->route('admin.games.index')
             ->with([
-                'message' => 'スカウト登録を実施しました。',
+                'message' => '試合登録を実施しました。',
                 'status' => 'info'
             ]);
     }

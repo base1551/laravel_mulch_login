@@ -65,7 +65,9 @@
                                     @endif
                                     </tbody>
                                 </table>
-                                {{ $teams->links() }}
+                                @if($teams)
+                                    {{ $teams->links() }}
+                                @endif
                             </div>
                         </div>
                     </section>
