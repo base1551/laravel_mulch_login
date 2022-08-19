@@ -12,6 +12,7 @@ use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -29,6 +30,8 @@ class GameController extends Controller
     public function index()
     {
         $games = Game::paginate(CommonConst::PAGINATE_COUNT);
+//        dump($games[1]);
+//        dd($games[0]->id);
 
         return view(
             'admin.games.index', compact('games')
@@ -48,11 +51,11 @@ class GameController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @param Request $request
+     * @return RedirectResponse
      * @throws Throwable
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         //todo:フォームバリデーション
         $request->validate([
@@ -104,5 +107,13 @@ class GameController extends Controller
             ]);
     }
 
+    /**
+     * 試合変種画面に遷移
+     */
+    public function edit(int $id): Factory|View|Application
+    {
+        $game = Game::findOrFail($id);
+        return view('admin.games.edit', compact('game'));
+    }
 
 }

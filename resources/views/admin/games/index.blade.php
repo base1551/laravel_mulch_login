@@ -24,10 +24,10 @@
                                     <thead>
                                     <tr>
                                         <th class="md:px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tl rounded-bl">
-                                            名前
+                                            試合
                                         </th>
                                         <th class="md:px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">
-                                            対戦日付
+                                            試合日付
                                         </th>
                                         <th class="md:px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tr rounded-br"></th>
                                         <th class="md:px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tr rounded-br"></th>
@@ -36,18 +36,20 @@
                                     @if($games)
                                         @foreach ($games as $game)
                                             <tr>
-                                                <td class="md:px-4 py-3">{{ $game->first_team }}
-                                                    対{{$game->second_team_id}}</td>
-                                                <td class="md:px-4 py-3">{{ $game->created_at }}</td>
+                                                <td class="md:px-4 py-3">
+                                                    {{ $game->teams[0]->name }}
+                                                    対 {{ $game->teams[1]->name }}
+                                                </td>
+                                                <td class="md:px-4 py-3">{{ $game->created_at->format('Y-m-d') }}</td>
                                                 <td class="md:px-4 py-3">
                                                     <button
-                                                        onclick="location.href='{{ route('admin.owners.edit', ['owner' => $game->id ])}}'"
+                                                        onclick="location.href='{{ route('admin.games.edit', ['game' => $game->id ])}}'"
                                                         class="text-white bg-indigo-400 border-0 py-2 px-4 focus:outline-none hover:bg-indigo-500 rounded ">
                                                         編集
                                                     </button>
                                                 </td>
                                                 <form id="delete_{{$game->id}}" method="post"
-                                                      action="{{ route('admin.owners.destroy', ['owner' => $game->id ] )}}">
+                                                      action="{{ route('admin.games.destroy', ['game' => $game->id ] )}}">
                                                     @csrf
                                                     @method('delete')
                                                     <td class="md:px-4 py-3">
@@ -64,7 +66,7 @@
                                 </table>
                                 @if($games)
                                     {{ $games->links() }}
-                                @endif  　
+                                @endif
                             </div>
                         </div>
                     </section>
