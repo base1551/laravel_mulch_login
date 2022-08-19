@@ -4,7 +4,7 @@
 - composer install
 - npm install
 - npm run dev
-
+    - エラーが出た場合は、`npm update`等エラー内容に合わせて対応
 .env.example をコピーして .env ファイルを作成
 
 .envファイルの中の下記をご利用の環境に合わせて変更してください。
