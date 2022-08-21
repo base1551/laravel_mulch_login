@@ -40,9 +40,9 @@ XAMPP/MAMPまたは他の開発環境でDBを起動した後に
 で簡易サーバーを立ち上げ、表示確認してください。
 
 # システムアーキテクチャ
-- クエリはEloquentBuilderをできるだけ使用する(Laravelの強みだと思っているので)
 - https://zenn.dev/mpyw/articles/ce7d09eb6d8117 のようなアーキテクチャにしたいけど、初めは冗長的になってリファクタリングしていくかも…
 - 定数はapp/config/consts内に書く
+- クエリはEloquentBuilderをできるだけ使用する(アーキテクチャじゃないかもしれませんが)
 
 # 規約
 - フォーマットはPSR2で整形
