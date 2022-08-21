@@ -1,9 +1,8 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\admin;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class GameTest extends TestCase
@@ -18,7 +17,11 @@ class GameTest extends TestCase
     public function サンプルテスト()
     {
         $response = $this->get('/');
-
-        $response->assertStatus(200);
+        $response->assertStatus(302);
     }
+
+//    /**
+//     * @test
+//     */
+//    public function
 }

@@ -13,7 +13,7 @@ class Game extends Model
 
     public function teams(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(Team::class)->withPivot('first_attack_flg');
+        return $this->belongsToMany(Team::class)->withPivot('first_attack_flg', 'score');
     }
 
 }

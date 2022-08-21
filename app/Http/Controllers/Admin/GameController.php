@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Consts\CommonConst;
 use App\Consts\GameTeamConst;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\GameRequest;
 use App\Models\Game;
 use App\Models\Team;
+use App\Repositories\GameRepository;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
@@ -30,8 +32,6 @@ class GameController extends Controller
     public function index()
     {
         $games = Game::paginate(CommonConst::PAGINATE_COUNT);
-//        dump($games[1]);
-//        dd($games[0]->id);
 
         return view(
             'admin.games.index', compact('games')
@@ -51,52 +51,24 @@ class GameController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
+     * @param GameRequest $request
      * @return RedirectResponse
      * @throws Throwable
      */
-    public function store(Request $request): RedirectResponse
+    public function store(GameRequest $request): RedirectResponse
     {
-        //todo:フォームバリデーション
-        $request->validate([
-            'game_date' => 'required|date',
-            'first_team_name' => 'required|string',
-            'second_team_name' => 'required|string',
-            'first_team_score' => 'required|int',
-            'second_team_score' => 'required|int',
-        ]);
-
         try {
-            //todo:idからの取得
-            //game更新
-            //game_team登録
             DB::transaction(function () use ($request) {
-                $first_team = Team::where('name', $request->first_team_name)->firstOrFail();
-                $second_team = Team::where('name', $request->second_team_name)->firstOrFail();
-
                 $game = Game::create([
                     'game_date' => Carbon::parse($request->game_date),
                 ]);
-                //todo:ヒット、エラー数登録処理
-                //todo:共通化
-                $game->teams()->attach(
-                    $first_team->id,
-                    [
-                        'first_attack_flg' => GameTeamConst::FIRST_ATTACK,
-                        'score' => $request->first_team_score,
-                    ]
-                );
-                $game->teams()->attach(
-                    $second_team->id,
-                    [
-                        'first_attack_flg' => GameTeamConst::SECOND_ATTACK,
-                        'score' => $request->second_team_score,
-                    ]
-                );
+                $repo = new GameRepository();
+                $repo->saveGameTeamRelation($request, $game);
             });
+
         } catch (Throwable $e) {
             Log::error($e);
-            throw $e;
+            abort(403);
         }
 
         return redirect()
@@ -113,7 +85,43 @@ class GameController extends Controller
     public function edit(int $id): Factory|View|Application
     {
         $game = Game::findOrFail($id);
-        return view('admin.games.edit', compact('game'));
+        //todo:リポジトリクラスに取得処理実装
+        if ($game->teams[0]->pivot->first_attack_flg == GameTeamConst::FIRST_ATTACK) {
+            $first_team = $game->teams[0];
+            $second_team = $game->teams[1];
+        } else {
+            $first_team = $game->teams[1];
+            $second_team = $game->teams[0];
+        }
+
+        return view('admin.games.edit', compact('game', 'first_team', 'second_team'));
     }
+
+    /**
+     * 更新処理
+     */
+    public function update(GameRequest $request, int $id)
+    {
+        try {
+            DB::transaction(function () use ($request, $id) {
+                $game = Game::findOrFail($id);
+                $game->update($request->toArray());
+
+                $repo = new GameRepository();
+                $repo->saveGameTeamRelation($request, $game);
+            });
+
+        } catch (Throwable $e) {
+            Log::error($e);
+            abort(403);
+        }
+        return redirect()
+            ->route('admin.games.edit', ['game' => $id])
+            ->with([
+                'message' => '試合情報を更新しました。',
+                'status' => 'info'
+            ]);
+    }
+
 
 }

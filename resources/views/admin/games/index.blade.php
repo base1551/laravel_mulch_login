@@ -40,7 +40,7 @@
                                                     {{ $game->teams[0]->name }}
                                                     対 {{ $game->teams[1]->name }}
                                                 </td>
-                                                <td class="md:px-4 py-3">{{ $game->created_at->format('Y-m-d') }}</td>
+                                                <td class="md:px-4 py-3">{{ $game->game_date }}</td>
                                                 <td class="md:px-4 py-3">
                                                     <button
                                                         onclick="location.href='{{ route('admin.games.edit', ['game' => $game->id ])}}'"
